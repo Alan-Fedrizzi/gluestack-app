@@ -1,4 +1,7 @@
-import { config } from '@gluestack-ui/config';
+import {
+import { GluestackUIProvider } from '@/components/ui/gluestack-ui-provider';
+import '@/global.css';
+ config } from '@gluestack-ui/config';
 import {
   Box,
   Button,
