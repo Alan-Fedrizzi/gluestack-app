@@ -27,6 +27,9 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
+    "experiments": {
+      "baseUrl": "/templarios-gluestack"
+    },
     "extra": {
       "eas": {
         "projectId": "57e35255-8dc7-40de-bef7-fcfc662de302"
