@@ -26,6 +26,10 @@ import AlertPreview from '@/components/custom/alert-preview';
 import ProgressPreview from '@/components/custom/progress-preview';
 import SpinnerPreview from '@/components/custom/spinner-preview';
 import ToastPreview from '@/components/custom/toast-preview';
+import ModalPreview from '@/components/custom/modal-preview';
+import PopoverPreview from '@/components/custom/popover-preview';
+import TooltipPreview from '@/components/custom/tooltip-preview';
+import MenuPreview from '@/components/custom/menu-preview';
 import '@/global.css';
 
 type ColorMode = 'light' | 'dark';
@@ -152,6 +156,10 @@ const previewMap: Record<string, React.ComponentType<PreviewProps>> = {
   progress: ProgressPreview,
   spinner: SpinnerPreview,
   toast: ToastPreview,
+  modal: ModalPreview,
+  popover: PopoverPreview,
+  tooltip: TooltipPreview,
+  menu: MenuPreview,
 };
 
 export default function App() {

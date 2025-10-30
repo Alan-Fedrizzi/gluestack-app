@@ -43,7 +43,19 @@ export default function SpinnerPreview({ onBack }: SpinnerPreviewProps) {
                   <Spinner
                     size={values.size as any}
                     accessibilityLabel="Loading"
+                    // Pass both className and explicit color prop to ensure color updates reliably
                     className={`text-${values.color}-500`}
+                    color={
+                      (
+                        {
+                          primary: 'rgb(var(--color-primary-500))',
+                          success: 'rgb(var(--color-success-500))',
+                          warning: 'rgb(var(--color-warning-500))',
+                          error: 'rgb(var(--color-error-500))',
+                          info: 'rgb(var(--color-info-500))',
+                        } as Record<string, string>
+                      )[values.color as string]
+                    }
                   />
                 </Box>
               )}
