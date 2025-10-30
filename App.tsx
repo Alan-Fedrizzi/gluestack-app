@@ -14,6 +14,18 @@ import { Grid, GridItem } from '@/components/ui/grid';
 import { Image } from '@/components/ui/image';
 import { getAllComponents } from '@/utils/getComponents';
 import type { NestedComponents } from '@/types/components';
+import HeadingPreview from '@/components/custom/heading-preview';
+import TextPreview from '@/components/custom/text-preview';
+import BoxPreview from '@/components/custom/box-preview';
+import CenterPreview from '@/components/custom/center-preview';
+import DividerPreview from '@/components/custom/divider-preview';
+import HStackPreview from '@/components/custom/hstack-preview';
+import VStackPreview from '@/components/custom/vstack-preview';
+import GridPreview from '@/components/custom/grid-preview';
+import AlertPreview from '@/components/custom/alert-preview';
+import ProgressPreview from '@/components/custom/progress-preview';
+import SpinnerPreview from '@/components/custom/spinner-preview';
+import ToastPreview from '@/components/custom/toast-preview';
 import '@/global.css';
 
 type ColorMode = 'light' | 'dark';
@@ -126,8 +138,25 @@ const Header = () => {
   );
 };
 
+type PreviewProps = { onBack: () => void };
+const previewMap: Record<string, React.ComponentType<PreviewProps>> = {
+  heading: HeadingPreview,
+  text: TextPreview,
+  box: BoxPreview,
+  center: CenterPreview,
+  divider: DividerPreview,
+  hstack: HStackPreview,
+  vstack: VStackPreview,
+  grid: GridPreview,
+  alert: AlertPreview,
+  progress: ProgressPreview,
+  spinner: SpinnerPreview,
+  toast: ToastPreview,
+};
+
 export default function App() {
   const [colorMode, setColorMode] = React.useState<ColorMode>('light');
+  const [selectedPreview, setSelectedPreview] = React.useState<string | null>(null);
   const components = React.useMemo<NestedComponents>(() => getAllComponents(), []);
 
   const filteredComponents = React.useMemo(() => {
@@ -148,6 +177,53 @@ export default function App() {
     setColorMode((prev) => (prev === 'light' ? 'dark' : 'light'));
   }, []);
 
+  const renderHome = () => (
+    <SafeAreaView className="flex-1 bg-background-0">
+      <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
+        <Header />
+        <VStack className="p-5 md:px-20">
+          {filteredComponents.map((category) => (
+            <Box
+              key={category.category}
+              className="mt-4 border-b border-outline-100 pb-8"
+            >
+              <Heading size="lg" className="text-typography-900 mb-4">
+                {category.category}
+              </Heading>
+              <Grid
+                className="gap-5"
+                _extra={{
+                  className: 'grid-cols-2 md:grid-cols-4 xl:grid-cols-6',
+                }}
+              >
+                {category.components.map((component) => (
+                  <GridItem
+                    key={component.name}
+                    _extra={{
+                      className: 'col-span-1',
+                    }}
+                  >
+                    <ComponentCard
+                      component={component}
+                      onPress={() => {
+                        const key = (component.path ?? '').toLowerCase();
+                        if (previewMap[key]) {
+                          setSelectedPreview(key);
+                        } else {
+                          console.log(`Component pressed: ${component.path ?? component.name}`);
+                        }
+                      }}
+                    />
+                  </GridItem>
+                ))}
+              </Grid>
+            </Box>
+          ))}
+        </VStack>
+      </ScrollView>
+    </SafeAreaView>
+  );
+
   return (
     <SafeAreaProvider>
       <ColorModeContext.Provider value={{ colorMode }}>
@@ -156,47 +232,13 @@ export default function App() {
             style="auto"
             backgroundColor={colorMode === 'light' ? '#F6F6F6' : '#272625'}
           />
-          <SafeAreaView className="flex-1 bg-background-0">
-            <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
-              <Header />
-              <VStack className="p-5 md:px-20">
-                {filteredComponents.map((category) => (
-                  <Box
-                    key={category.category}
-                    className="mt-4 border-b border-outline-100 pb-8"
-                  >
-                    <Heading size="lg" className="text-typography-900 mb-4">
-                      {category.category}
-                    </Heading>
-                    <Grid
-                      className="gap-5"
-                      _extra={{
-                        className: 'grid-cols-2 md:grid-cols-4 xl:grid-cols-6',
-                      }}
-                    >
-                      {category.components.map((component) => (
-                        <GridItem
-                          key={component.name}
-                          _extra={{
-                            className: 'col-span-1',
-                          }}
-                        >
-                          <ComponentCard
-                            component={component}
-                            onPress={() =>
-                              console.log(
-                                `Component pressed: ${component.path ?? component.name}`
-                              )
-                            }
-                          />
-                        </GridItem>
-                      ))}
-                    </Grid>
-                  </Box>
-                ))}
-              </VStack>
-            </ScrollView>
-          </SafeAreaView>
+          {!selectedPreview && renderHome()}
+          {selectedPreview && (() => {
+            const SelectedComponent = previewMap[selectedPreview];
+            return SelectedComponent ? (
+              <SelectedComponent onBack={() => setSelectedPreview(null)} />
+            ) : null;
+          })()}
           <Fab
             className="bottom-10 sm:right-10 right-6 p-4 z-0"
             onPress={toggleColorMode}

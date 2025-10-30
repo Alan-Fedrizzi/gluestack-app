@@ -15,6 +15,21 @@ module.exports = {
       pattern:
         /(bg|border|text|stroke|fill)-(primary|secondary|tertiary|error|success|warning|info|typography|outline|background|indicator)-(0|50|100|200|300|400|500|600|700|800|900|950|white|gray|black|error|warning|muted|success|info|light|dark|primary)/,
     },
+    {
+      // grid columns used dinamicamente nos previews (com variantes)
+      pattern: /grid-cols-(2|3|4|5|6)/,
+      variants: ['sm', 'md', 'lg', 'xl'],
+    },
+    {
+      // gaps usados dinamicamente nos previews (com variantes)
+      pattern: /gap-(0|1|2|3|4|6)/,
+      variants: ['sm', 'md', 'lg', 'xl'],
+    },
+    {
+      // col-span básico para itens (com variantes)
+      pattern: /col-span-(1|2|3|4|5|6)/,
+      variants: ['sm', 'md', 'lg', 'xl'],
+    },
   ],
   theme: {
     extend: {
